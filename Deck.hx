@@ -7,26 +7,26 @@ class Deck extends GenericStack<Card>{
 		var card:Card;
 		for (i in 1...5){	
 			switch(i){
-				case 4: symbol = "Hearts";
-				case 3: symbol = "Diamonds";
-				case 2: symbol = "Clubs";
-				case 1: symbol = "Spades";
+				case 1: symbol = "Diamonds";
+				case 2: symbol = "Hearts";
+				case 3: symbol = "Clubs";
+				case 4: symbol = "Spades";
 			}
 			for (j in 1...14){
 				switch(j){
-					case 13: value = "K";
-					case 12: value = "Q";
-					case 11: value = "J";
-					case 10: value = "10";
-					case 9: value = "9";
-					case 8: value = "8";
-					case 7: value = "7";
-					case 6: value = "6";
-					case 5: value = "5";
-					case 4: value = "4";
-					case 3: value = "3";
-					case 2: value = "2";
 					case 1: value = "A";
+					case 2: value = "2";
+					case 3: value = "3";
+					case 4: value = "4";
+					case 5: value = "5";
+					case 6: value = "6";
+					case 7: value = "7";
+					case 8: value = "8";
+					case 9: value = "9";
+					case 10: value = "10";
+					case 11: value = "J";
+					case 12: value = "Q";
+					case 13: value = "K";
 				}
 				card = new Card(symbol, value);
 				this.add(card);
@@ -35,26 +35,33 @@ class Deck extends GenericStack<Card>{
 	}
 
 	public function shuffle(){
-		var list:List<Card> = new List<Card>();
+		var array = new Array<Card>();
 		var temp:Card;
 		var key:Int;
 
 		while (!this.isEmpty())
-			list.add(this.pop());
+			array.push(this.pop());
 
-		for (j in 0...list.length){
-			temp = list.first();
-			
-			key = Std.int(Math.random()*100%list.length);
-			trace(key);
-		}//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-		//trace(list.length);
+		for (i in 0...array.length){
+			temp = array[array.length-i-1];
+			key = Std.int(Math.random()*100%(array.length-1));
+			array[array.length-i-1] = array[key];
+			array[key] = temp;
+		}
+
+		for (i in 0...52)
+			this.add(array[i]);
+	}
+
+	public function multiShuffle(x:Int){
+		for (i in 0...x)
+			this.shuffle();
 	}
 
 	public function print(){
 		var symbol:String, value:String;
 		var tempCard:Card;
-		var tempDeck:Deck = new Deck();
+		var tempDeck:GenericStack<Card> = new GenericStack<Card>();
 		while (!this.isEmpty()){	
 			tempCard = this.pop();
 			tempDeck.add(tempCard);
@@ -63,14 +70,5 @@ class Deck extends GenericStack<Card>{
 		for (i in 0...52){
 			this.add(tempDeck.pop());
 		}
-	}
-
-	static public function main(){
-		var deck:Deck = new Deck();
-		deck.print();
-		trace(":v");
-		deck.print();
-		deck.shuffle();
-		deck.print();		
 	}
 }
